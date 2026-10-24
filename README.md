@@ -6,6 +6,8 @@ EventEase is a full-stack event registration web application built using the MER
 
 The application uses React for the frontend, Node.js and Express.js for the backend, and MongoDB for storing event and registration data.
 
+**Live Website Link:  https://event-ease-1.onrender.com/**
+
 ## 2. Features
 
 ### Participant Features
