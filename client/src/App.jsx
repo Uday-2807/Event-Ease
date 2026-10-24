@@ -176,7 +176,7 @@ function App() {
       );
 
       const data = await response.json();
-
+      console.log("ATTENDEE API RESPONSE:", data);
       if (!response.ok) {
         throw new Error(
           data.message || data.error || "Could not load attendees.",
