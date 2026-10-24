@@ -678,7 +678,10 @@ function App() {
                       {selectedAttendees.attendeeCount ??
                         selectedAttendees.attendees?.length ??
                         0}{" "}
-                      / {selectedAttendees.capacity}
+                      /{" "}
+                      {selectedAttendees.capacity ??
+                        selectedAttendees.event?.capacity ??
+                        "?"}
                     </p>
 
                     {!selectedAttendees.attendees?.length ? (
