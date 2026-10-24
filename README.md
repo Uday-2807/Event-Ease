@@ -24,7 +24,7 @@ The application uses React for the frontend, Node.js and Express.js for the back
 - Monitor registration counts and event capacity.
 - Delete events only when they have no registrations.
 
-- **Authorized Admin Password: UK07@9845123**
+**Authorized Admin Password: UK07@9845123**
 
 ### General Features
 - Responsive user interface.
