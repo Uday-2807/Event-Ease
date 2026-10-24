@@ -43,6 +43,14 @@ function App() {
       });
     }
   }, [selectedEvent]);
+  useEffect(() => {
+    if (selectedAttendees && attendeeSectionRef.current) {
+      attendeeSectionRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [selectedAttendees]);
 
   useEffect(() => {
     async function fetchEvents() {
@@ -174,12 +182,7 @@ function App() {
       }
 
       setSelectedAttendees(data);
-      setTimeout(() => {
-        attendeeSectionRef.current?.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }, 100);
+
     } catch (err) {
       setAdminError(err.message || "Could not load attendees.");
     }
