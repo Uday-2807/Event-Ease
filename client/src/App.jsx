@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function App() {
   const [theme, setTheme] = useState(
@@ -9,6 +10,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const registrationSectionRef = useRef(null);
   const [participantName, setParticipantName] = useState("");
   const [participantEmail, setParticipantEmail] = useState("");
   const [registrationMessage, setRegistrationMessage] = useState("");
@@ -32,11 +34,19 @@ function App() {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("eventease-theme", theme);
   }, [theme]);
+  useEffect(() => {
+    if (selectedEvent && registrationSectionRef.current) {
+      registrationSectionRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [selectedEvent]);
 
   useEffect(() => {
     async function fetchEvents() {
       try {
-        const response = await fetch("http://localhost:5000/api/events");
+        const response = await fetch(`${API_URL}/api/events`);
 
         if (!response.ok) {
           throw new Error("Unable to load events.");
@@ -84,7 +94,7 @@ function App() {
     setAdminMessage("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -116,7 +126,7 @@ function App() {
     setAdminError("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/events", {
+      const response = await fetch(`${API_URL}/api/events`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -146,7 +156,7 @@ function App() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/events/${eventId}/attendees`,
+        `${API_URL}/api/events/${eventId}/attendees`,
         {
           headers: {
             Authorization: `Bearer ${adminToken}`,
@@ -178,15 +188,12 @@ function App() {
     setAdminMessage("");
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/events/${eventId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${adminToken}`,
-          },
+      const response = await fetch(`${API_URL}/api/events/${eventId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
         },
-      );
+      });
 
       const data = await response.json();
 
@@ -210,7 +217,7 @@ function App() {
     setAdminMessage("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/events", {
+      const response = await fetch(`${API_URL}/api/events`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -249,7 +256,7 @@ function App() {
 
   async function refreshPublicEvents() {
     try {
-      const response = await fetch("http://localhost:5000/api/events");
+      const response = await fetch(`${API_URL}/api/events`);
 
       if (!response.ok) {
         throw new Error("Unable to refresh the public event list.");
@@ -276,7 +283,7 @@ function App() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/events/${selectedEvent._id}/registrations`,
+        `${API_URL}/api/events/${selectedEvent._id}/registrations`,
         {
           method: "POST",
           headers: {
@@ -452,7 +459,11 @@ function App() {
         </section>
 
         {selectedEvent && (
-          <section className="registration-section" id="registration">
+          <section
+            className="registration-section"
+            id="registration"
+            ref={registrationSectionRef}
+          >
             <div className="registration-panel">
               <button
                 type="button"
@@ -466,7 +477,6 @@ function App() {
                 ← Back to events
               </button>
 
-              <span className="eyebrow">SAVE YOUR SPOT</span>
               <h2>Register for {selectedEvent.title}</h2>
               <p>{selectedEvent.description}</p>
 
