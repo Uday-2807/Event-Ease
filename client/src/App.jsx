@@ -44,10 +44,12 @@ function App() {
     }
   }, [selectedEvent]);
   useEffect(() => {
-    if (selectedAttendees && attendeeSectionRef.current) {
-      attendeeSectionRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
+    if (selectedAttendees !== null) {
+      requestAnimationFrame(() => {
+        attendeeSectionRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
       });
     }
   }, [selectedAttendees]);
@@ -182,7 +184,6 @@ function App() {
       }
 
       setSelectedAttendees(data);
-
     } catch (err) {
       setAdminError(err.message || "Could not load attendees.");
     }
