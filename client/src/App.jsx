@@ -11,6 +11,7 @@ function App() {
   const [error, setError] = useState("");
   const [selectedEvent, setSelectedEvent] = useState(null);
   const registrationSectionRef = useRef(null);
+  const attendeeSectionRef = useRef(null);
   const [participantName, setParticipantName] = useState("");
   const [participantEmail, setParticipantEmail] = useState("");
   const [registrationMessage, setRegistrationMessage] = useState("");
@@ -173,6 +174,12 @@ function App() {
       }
 
       setSelectedAttendees(data);
+      setTimeout(() => {
+        attendeeSectionRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 100);
     } catch (err) {
       setAdminError(err.message || "Could not load attendees.");
     }
@@ -673,7 +680,10 @@ function App() {
                     {!selectedAttendees.attendees?.length ? (
                       <p>No attendees have registered for this event yet.</p>
                     ) : (
-                      <div className="attendee-table-wrapper">
+                      <div
+                        className="attendee-table-wrapper"
+                        ref={attendeeSectionRef}
+                      >
                         <table className="attendee-table">
                           <thead>
                             <tr>
